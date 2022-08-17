@@ -1,0 +1,41 @@
+input AMPLIFY {
+  globalAuthRule: AuthRule = {allow: public}
+}
+
+type Policy @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  actions: [Action] @manyToMany(relationName: "ActionPolicy")
+  resources: [Resource] @manyToMany(relationName: "ResourcePolicy")
+  provider_account_id: ID! @index(name: "byProviderAccount")
+}
+
+type Action @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  provider_id: ID! @index(name: "byProvider")
+  policies: [Policy] @manyToMany(relationName: "ActionPolicy")
+}
+
+type ProviderAccount @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  provider_id: ID! @index(name: "byProvider")
+  resources: [Resource] @hasMany(indexName: "byProviderAccount", fields: ["id"])
+  policies: [Policy] @hasMany(indexName: "byProviderAccount", fields: ["id"])
+}
+
+type Provider @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  category: String!
+  accounts: [ProviderAccount] @hasMany(indexName: "byProvider", fields: ["id"])
+  actions: [Action] @hasMany(indexName: "byProvider", fields: ["id"])
+}
+
+type Resource @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  provider_account_id: ID! @index(name: "byProviderAccount")
+  policies: [Policy] @manyToMany(relationName: "ResourcePolicy")
+} 

@@ -10,6 +10,11 @@
       "StackName": "amplify-controlplane-staging-144345",
       "StackId": "arn:aws:cloudformation:eu-west-1:808221725440:stack/amplify-controlplane-staging-144345/ff18b860-1e3a-11ed-bf78-0ac7dae3bca5",
       "AmplifyAppId": "d33s49j4zjwtbl"
+    },
+    "categories": {
+      "auth": {
+        "controlplane": {}
+      }
     }
   }
 }

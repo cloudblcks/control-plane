@@ -1,0 +1,6 @@
+{
+  "AppSyncApiName": "controlplane",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2022-08-17T16:12:55.986Z"
+}
