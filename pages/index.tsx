@@ -58,68 +58,62 @@ const Home: BlitzPage = () => {
     <Layout title="Home">
       <div className="container">
         <main>
-          <div className="logo">
-            <Image src={`${logo.src}`} alt="blitzjs" width="256px" height="118px" layout="fixed" />
-          </div>
           <p>
-            <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
+            <strong>Welcome to Cloudblocks!</strong> Here you can configure IAM roles and policies for all your managed, serverless and PaaS infrastrucutre!
           </p>
           <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
             <Suspense fallback="Loading...">
               <UserInfo />
             </Suspense>
           </div>
-          <p>
-            <strong>
-              To add a new model to your app, <br />
-              run the following in your terminal:
-            </strong>
-          </p>
-          <pre>
-            <code>blitz generate all project name:string</code>
-          </pre>
-          <div style={{ marginBottom: "1rem" }}>(And select Yes to run prisma migrate)</div>
-          <div>
-            <p>
-              Then <strong>restart the server</strong>
-            </p>
-            <pre>
-              <code>Ctrl + c</code>
-            </pre>
-            <pre>
-              <code>blitz dev</code>
-            </pre>
-            <p>
-              and go to{" "}
-              <Link href="/projects">
-                <a>/projects</a>
-              </Link>
-            </p>
-          </div>
           <div className="buttons" style={{ marginTop: "5rem" }}>
             <a
-              className="button"
-              href="https://blitzjs.com/docs/getting-started?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
+              className="button-outline"
+              href="/providers"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Documentation
+              Providers
             </a>
             <a
               className="button-outline"
-              href="https://github.com/blitz-js/blitz"
+              href="/provider-accounts"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Github Repo
+              Connected Accounts
             </a>
             <a
               className="button-outline"
-              href="https://discord.blitzjs.com"
+              href="/actions"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Discord Community
+              Actions
+            </a>
+            <a
+              className="button-outline"
+              href="/resources"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Resources
+            </a>
+            <a
+              className="button-outline"
+              href="/policies"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Policies
+            </a>
+            <a
+              className="button-outline"
+              href="/access-roles"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Access Roles
             </a>
           </div>
         </main>
