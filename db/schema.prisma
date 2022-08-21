@@ -51,6 +51,8 @@ model Policy {
   AccessRolePolicies  AccessRolePolicies[]
   PolicyActions       PolicyActions[]
   PolicyResources     PolicyResources[]
+  user                User                 @relation(fields: [userId], references: [id])
+  userId              Int
 }
 
 model PolicyActions {
@@ -85,6 +87,8 @@ model ProviderAccount {
   provider    Provider   @relation(fields: [provider_id], references: [id])
   Policy      Policy[]
   Resource    Resource[]
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int
 }
 
 model Resource {
@@ -95,19 +99,24 @@ model Resource {
   provider_account      ProviderAccount         @relation(fields: [provider_account_id], references: [id])
   AccessRoleAssignments AccessRoleAssignments[]
   PolicyResources       PolicyResources[]
+  user                  User                    @relation(fields: [userId], references: [id])
+  userId                Int
 }
 
 model User {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  name           String?
-  email          String       @unique
-  hashedPassword String?
-  role           String       @default("user")
-  sessions       Session[]
-  tokens         Token[]
-  AccessRole     AccessRole[]
+  id              Int               @id @default(autoincrement())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  name            String?
+  email           String            @unique
+  hashedPassword  String?
+  role            String            @default("user")
+  sessions        Session[]
+  tokens          Token[]
+  AccessRole      AccessRole[]
+  Policy          Policy[]
+  ProviderAccount ProviderAccount[]
+  Resource        Resource[]
 }
 
 model Session {
