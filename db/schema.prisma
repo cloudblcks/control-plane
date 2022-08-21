@@ -1,0 +1,166 @@
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model AccessRole {
+  id                    BigInt                  @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  name                  String                  @db.VarChar(255)
+  account_id            String                  @db.VarChar(255)
+  AccessRoleAssignments AccessRoleAssignments[]
+  AccessRolePolicies    AccessRolePolicies[]
+}
+
+model AccessRoleAssignments {
+  id             BigInt     @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  access_role_id BigInt
+  resource_id    BigInt
+  resource       Resource   @relation(fields: [resource_id], references: [id])
+  access_role    AccessRole @relation(fields: [access_role_id], references: [id])
+}
+
+model AccessRolePolicies {
+  id             BigInt     @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  access_role_id BigInt
+  policy_id      BigInt
+  access_role    AccessRole @relation(fields: [access_role_id], references: [id])
+  policy         Policy     @relation(fields: [policy_id], references: [id])
+}
+
+model Action {
+  id          BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  name        String   @db.VarChar(255)
+  provider_id BigInt
+  provider    Provider @relation(fields: [provider_id], references: [id])
+}
+
+model Policy {
+  id                  BigInt               @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  name                String               @db.VarChar(255)
+  provider_account_id BigInt
+  account_id          String               @db.VarChar(255)
+  provider_account    ProviderAccount      @relation(fields: [provider_account_id], references: [id])
+  AccessRolePolicies  AccessRolePolicies[]
+  PolicyActions       PolicyActions[]
+  PolicyResources     PolicyResources[]
+}
+
+model PolicyActions {
+  id        BigInt @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  policy_id BigInt
+  action_id BigInt
+  policy    Policy @relation(fields: [policy_id], references: [id])
+}
+
+model PolicyResources {
+  id          BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  policy_id   BigInt
+  resource_id BigInt
+  policy      Policy   @relation(fields: [policy_id], references: [id])
+  resource    Resource @relation(fields: [resource_id], references: [id])
+}
+
+model Provider {
+  id              BigInt            @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  name            String            @db.VarChar(255)
+  category        String            @db.VarChar(255)
+  Action          Action[]
+  ProviderAccount ProviderAccount[]
+}
+
+model ProviderAccount {
+  id          BigInt     @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  name        String     @db.VarChar(255)
+  provider_id BigInt
+  credentials Json
+  account_id  String     @db.VarChar(255)
+  provider    Provider   @relation(fields: [provider_id], references: [id])
+  Policy      Policy[]
+  Resource    Resource[]
+}
+
+model Resource {
+  id                    BigInt                  @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  name                  String                  @db.VarChar(255)
+  provider_account_id   BigInt
+  account_id            String                  @db.VarChar(255)
+  provider_account      ProviderAccount         @relation(fields: [provider_account_id], references: [id])
+  AccessRoleAssignments AccessRoleAssignments[]
+  PolicyResources       PolicyResources[]
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  name           String?
+  email          String    @unique
+  hashedPassword String?
+  role           String    @default("user")
+  sessions       Session[]
+  tokens         Token[]
+}
+
+model Session {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  expiresAt          DateTime?
+  handle             String    @unique
+  user               User?     @relation(fields: [userId], references: [id])
+  userId             Int?
+  hashedSessionToken String?
+  antiCSRFToken      String?
+  publicData         String?
+  privateData        String?
+}
+
+model Token {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  hashedToken String
+  type        String
+  expiresAt   DateTime
+  sentTo      String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  @@unique([hashedToken, type])
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AccessRoleAssignment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AccessRolePolicy {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PolicyAction {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PolicyResource {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
