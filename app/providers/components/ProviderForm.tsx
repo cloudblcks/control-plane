@@ -9,6 +9,7 @@ export function ProviderForm<S extends z.ZodType<any, any>>(
   return (
     <Form<S> {...props}>
       <LabeledTextField name="name" label="Name" placeholder="Name" />
+      <LabeledTextField name="category" label="Category" placeholder="Category" />
     </Form>
   );
 }

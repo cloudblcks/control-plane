@@ -5,6 +5,7 @@ import { z } from "zod";
 const UpdateProvider = z.object({
   id: z.number(),
   name: z.string(),
+  category: z.string(),
 });
 
 export default resolver.pipe(

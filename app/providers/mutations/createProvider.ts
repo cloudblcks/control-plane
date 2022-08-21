@@ -4,6 +4,7 @@ import { z } from "zod";
 
 const CreateProvider = z.object({
   name: z.string(),
+  category: z.string(),
 });
 
 export default resolver.pipe(
