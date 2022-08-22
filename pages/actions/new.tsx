@@ -1,14 +1,25 @@
 import { Routes } from "@blitzjs/next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMutation } from "@blitzjs/rpc";
+import { useMutation, usePaginatedQuery } from "@blitzjs/rpc";
 import Layout from "app/core/layouts/Layout";
 import createAction from "app/actions/mutations/createAction";
 import { ActionForm, FORM_ERROR } from "app/actions/components/ActionForm";
+import { useCurrentUser } from "app/core/hooks/useCurrentUser";
+import getProviders from "app/providers/queries/getProviders";
+
+const ITEMS_PER_PAGE = 100;
 
 const NewActionPage = () => {
   const router = useRouter();
   const [createActionMutation] = useMutation(createAction);
+  const page = Number(router.query.page) || 0;
+  const [{ providers, hasMore }] = usePaginatedQuery(getProviders, {
+    orderBy: { id: "asc" },
+    skip: ITEMS_PER_PAGE * page,
+    take: ITEMS_PER_PAGE,
+  });
+  const currentUser = useCurrentUser()
 
   return (
     <Layout title={"Create New Action"}>
@@ -21,9 +32,15 @@ const NewActionPage = () => {
         //         then import and use it here
         // schema={CreateAction}
         // initialValues={{}}
+        options={providers.map((item) => {
+          return { label: item.name, value: item.id.toString() }
+        })}
         onSubmit={async (values) => {
           try {
-            const action = await createActionMutation(values);
+            const action = await createActionMutation({
+              name: values.name,
+              provider_id: parseInt(values.provider_id)
+            });
             router.push(Routes.ShowActionPage({ actionId: action.id }));
           } catch (error: any) {
             console.error(error);

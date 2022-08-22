@@ -3,13 +3,17 @@ import { Routes } from "@blitzjs/next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@blitzjs/rpc";
+import { useQuery, useMutation, usePaginatedQuery } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
 import Layout from "app/core/layouts/Layout";
 import getAction from "app/actions/queries/getAction";
 import updateAction from "app/actions/mutations/updateAction";
 import { ActionForm, FORM_ERROR } from "app/actions/components/ActionForm";
+import getProviders from "app/providers/queries/getProviders";
+import { useCurrentUser } from "app/core/hooks/useCurrentUser";
+
+const ITEMS_PER_PAGE = 100;
 
 export const EditAction = () => {
   const router = useRouter();
@@ -23,7 +27,13 @@ export const EditAction = () => {
     }
   );
   const [updateActionMutation] = useMutation(updateAction);
-
+  const page = Number(router.query.page) || 0;
+  const [{ providers, hasMore }] = usePaginatedQuery(getProviders, {
+    orderBy: { id: "asc" },
+    skip: ITEMS_PER_PAGE * page,
+    take: ITEMS_PER_PAGE,
+  });
+  const currentUser = useCurrentUser()
   return (
     <>
       <Head>
@@ -41,11 +51,15 @@ export const EditAction = () => {
           //         then import and use it here
           // schema={UpdateAction}
           initialValues={action}
+          options={providers.map((item) => {
+            return { label: item.name, value: item.id.toString() }
+          })}
           onSubmit={async (values) => {
             try {
               const updated = await updateActionMutation({
                 id: action.id,
-                ...values,
+                name: values.name,
+                provider_id: parseInt(values.provider_id),
               });
               await setQueryData(updated);
               router.push(Routes.ShowActionPage({ actionId: updated.id }));

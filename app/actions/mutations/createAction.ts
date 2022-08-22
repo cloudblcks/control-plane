@@ -4,6 +4,7 @@ import { z } from "zod";
 
 const CreateAction = z.object({
   name: z.string(),
+  provider_id: z.number()
 });
 
 export default resolver.pipe(
