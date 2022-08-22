@@ -4,6 +4,8 @@ import { z } from "zod";
 
 const CreateResource = z.object({
   name: z.string(),
+  provider_account_id: z.number(),
+  userId: z.number()
 });
 
 export default resolver.pipe(

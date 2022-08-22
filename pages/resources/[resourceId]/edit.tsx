@@ -3,7 +3,7 @@ import { Routes } from "@blitzjs/next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@blitzjs/rpc";
+import { useQuery, useMutation, usePaginatedQuery } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
 import Layout from "app/core/layouts/Layout";
@@ -13,6 +13,9 @@ import {
   ResourceForm,
   FORM_ERROR,
 } from "app/resources/components/ResourceForm";
+import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
+
+const ITEMS_PER_PAGE = 100;
 
 export const EditResource = () => {
   const router = useRouter();
@@ -26,7 +29,13 @@ export const EditResource = () => {
     }
   );
   const [updateResourceMutation] = useMutation(updateResource);
-
+  const page = Number(router.query.page) || 0;
+  const [{ providerAccounts, hasMore }] = usePaginatedQuery(getProviderAccounts, {
+    orderBy: { id: "asc" },
+    skip: ITEMS_PER_PAGE * page,
+    take: ITEMS_PER_PAGE,
+  });
+  const currentUser = useCurrentUser()
   return (
     <>
       <Head>
@@ -44,11 +53,16 @@ export const EditResource = () => {
           //         then import and use it here
           // schema={UpdateResource}
           initialValues={resource}
+          options={providerAccounts.map((item) => {
+            return { label: item.name, value: item.id.toString() }
+          })}
           onSubmit={async (values) => {
             try {
               const updated = await updateResourceMutation({
                 id: resource.id,
-                ...values,
+                name: values.name,
+                provider_account_id: parseInt(values.provider_account_id),
+                userId: currentUser.id
               });
               await setQueryData(updated);
               router.push(Routes.ShowResourcePage({ resourceId: updated.id }));
