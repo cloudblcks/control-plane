@@ -14,16 +14,17 @@ import { useCurrentUser } from "app/core/hooks/useCurrentUser";
 const ITEMS_PER_PAGE = 100;
 
 const NewProviderAccountPage = () => {
+
+  const router = useRouter();
+  const [createProviderAccountMutation] = useMutation(createProviderAccount);
+  const page = Number(router.query.page) || 0;
+  const [{ providers, hasMore }] = usePaginatedQuery(getProviders, {
+    orderBy: { id: "asc" },
+    skip: ITEMS_PER_PAGE * page,
+    take: ITEMS_PER_PAGE,
+  });
   const currentUser = useCurrentUser()
   if (currentUser) {
-    const router = useRouter();
-    const [createProviderAccountMutation] = useMutation(createProviderAccount);
-    const page = Number(router.query.page) || 0;
-    const [{ providers, hasMore }] = usePaginatedQuery(getProviders, {
-      orderBy: { id: "asc" },
-      skip: ITEMS_PER_PAGE * page,
-      take: ITEMS_PER_PAGE,
-    });
     return (
       <Layout title={"Create New ProviderAccount"}>
         <h1>Create New ProviderAccount</h1>
