@@ -3,6 +3,14 @@ import Link from "next/link"
 export const Header = () => {
   return (
     <div className="buttons" style={{ marginTop: "5rem" }}>
+      <Link href="/">
+        <a
+          className="button"
+          rel="noopener noreferrer"
+        >
+          Home
+        </a>
+      </Link>
       <Link href="/providers">
         <a
           className="button-outline"
