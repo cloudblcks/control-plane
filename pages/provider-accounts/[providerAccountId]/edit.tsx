@@ -3,7 +3,7 @@ import { Routes } from "@blitzjs/next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@blitzjs/rpc";
+import { useQuery, useMutation, usePaginatedQuery } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
 import Layout from "app/core/layouts/Layout";
@@ -13,9 +13,16 @@ import {
   ProviderAccountForm,
   FORM_ERROR,
 } from "app/provider-accounts/components/ProviderAccountForm";
+import getProviders from "app/providers/queries/getProviders";
+import { Prisma } from "@prisma/client";
+import { useCurrentUser } from "app/core/hooks/useCurrentUser";
+
+const ITEMS_PER_PAGE = 100;
 
 export const EditProviderAccount = () => {
+
   const router = useRouter();
+  const page = Number(router.query.page) || 0;
   const providerAccountId = useParam("providerAccountId", "number");
   const [providerAccount, { setQueryData }] = useQuery(
     getProviderAccount,
@@ -25,48 +32,64 @@ export const EditProviderAccount = () => {
       staleTime: Infinity,
     }
   );
+  providerAccount
   const [updateProviderAccountMutation] = useMutation(updateProviderAccount);
+  const [{ providers, hasMore }] = usePaginatedQuery(getProviders, {
+    orderBy: { id: "asc" },
+    skip: ITEMS_PER_PAGE * page,
+    take: ITEMS_PER_PAGE,
+  });
+  const currentUser = useCurrentUser()
+  if (currentUser) {
+    return (
+      <>
+        <Head>
+          <title>Edit ProviderAccount {providerAccount.id}</title>
+        </Head>
 
-  return (
-    <>
-      <Head>
-        <title>Edit ProviderAccount {providerAccount.id}</title>
-      </Head>
+        <div>
+          <h1>Edit ProviderAccount {providerAccount.id}</h1>
+          <pre>{JSON.stringify(providerAccount, null, 2)}</pre>
 
-      <div>
-        <h1>Edit ProviderAccount {providerAccount.id}</h1>
-        <pre>{JSON.stringify(providerAccount, null, 2)}</pre>
-
-        <ProviderAccountForm
-          submitText="Update ProviderAccount"
-          // TODO use a zod schema for form validation
-          //  - Tip: extract mutation's schema into a shared `validations.ts` file and
-          //         then import and use it here
-          // schema={UpdateProviderAccount}
-          initialValues={providerAccount}
-          onSubmit={async (values) => {
-            try {
-              const updated = await updateProviderAccountMutation({
-                id: providerAccount.id,
-                ...values,
-              });
-              await setQueryData(updated);
-              router.push(
-                Routes.ShowProviderAccountPage({
-                  providerAccountId: updated.id,
-                })
-              );
-            } catch (error: any) {
-              console.error(error);
-              return {
-                [FORM_ERROR]: error.toString(),
-              };
-            }
-          }}
-        />
-      </div>
-    </>
-  );
+          <ProviderAccountForm
+            submitText="Update ProviderAccount"
+            // TODO use a zod schema for form validation
+            //  - Tip: extract mutation's schema into a shared `validations.ts` file and
+            //         then import and use it here
+            // schema={UpdateProviderAccount}
+            initialValues={providerAccount}
+            options={providers.map((item) => {
+              return { label: item.name, value: item.id.toString() }
+            })}
+            onSubmit={async (values) => {
+              try {
+                const updated = await updateProviderAccountMutation({
+                  id: providerAccount.id,
+                  name: values.name,
+                  provider: parseInt(values.provider_id),
+                  user: currentUser.id,
+                  credentials: values.credentials
+                });
+                await setQueryData(updated);
+                router.push(
+                  Routes.ShowProviderAccountPage({
+                    providerAccountId: updated.id,
+                  })
+                );
+              } catch (error: any) {
+                console.error(error);
+                return {
+                  [FORM_ERROR]: error.toString(),
+                };
+              }
+            }}
+          />
+        </div>
+      </>
+    );
+  } else {
+    return <></>
+  }
 };
 
 const EditProviderAccountPage = () => {
@@ -89,3 +112,4 @@ EditProviderAccountPage.authenticate = true;
 EditProviderAccountPage.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default EditProviderAccountPage;
+
