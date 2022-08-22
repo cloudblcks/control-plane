@@ -66,56 +66,6 @@ const Home: BlitzPage = () => {
               <UserInfo />
             </Suspense>
           </div>
-          <div className="buttons" style={{ marginTop: "5rem" }}>
-            <a
-              className="button-outline"
-              href="/providers"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Providers
-            </a>
-            <a
-              className="button-outline"
-              href="/provider-accounts"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Connected Accounts
-            </a>
-            <a
-              className="button-outline"
-              href="/actions"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Actions
-            </a>
-            <a
-              className="button-outline"
-              href="/resources"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Resources
-            </a>
-            <a
-              className="button-outline"
-              href="/policies"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Policies
-            </a>
-            <a
-              className="button-outline"
-              href="/access-roles"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Access Roles
-            </a>
-          </div>
         </main>
 
         <footer>
