@@ -14,6 +14,7 @@ import {
   FORM_ERROR,
 } from "app/resources/components/ResourceForm";
 import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
+import { useCurrentUser } from "app/core/hooks/useCurrentUser";
 
 const ITEMS_PER_PAGE = 100;
 
