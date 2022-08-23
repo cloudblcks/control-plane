@@ -36,10 +36,11 @@ model AccessRolePolicies {
 }
 
 model Action {
-  id          Int      @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
-  name        String   @db.VarChar(255)
-  provider_id Int
-  provider    Provider @relation(fields: [provider_id], references: [id])
+  id            Int             @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  name          String          @db.VarChar(255)
+  provider_id   Int
+  provider      Provider        @relation(fields: [provider_id], references: [id])
+  PolicyActions PolicyActions[]
 }
 
 model Policy {
@@ -59,6 +60,7 @@ model PolicyActions {
   policy_id Int
   action_id Int
   policy    Policy @relation(fields: [policy_id], references: [id])
+  action    Action @relation(fields: [action_id], references: [id])
 }
 
 model PolicyResources {
