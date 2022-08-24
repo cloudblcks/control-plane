@@ -22,7 +22,10 @@ export default resolver.pipe(
       take,
       count: () => db.policy.count({ where }),
       query: (paginateArgs) =>
-        db.policy.findMany({ ...paginateArgs, where, orderBy }),
+        db.policy.findMany({ ...paginateArgs, where, orderBy, include: {
+          PolicyActions: true,
+          PolicyResources: true
+        } }),
     });
 
     return {

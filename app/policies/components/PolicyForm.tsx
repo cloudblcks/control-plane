@@ -20,7 +20,7 @@ export { FORM_ERROR } from "app/core/components/Form";
 
 export interface PolicyFormProps {
   options: Array<LabeledSelectOption>
-  onActionsListChange: (selected: Array<{ name: string, id: number }>) => void
+  onActionsListChange: (selected: Array<number>) => void
 }
 
 const ITEMS_PER_PAGE = 100;
@@ -64,7 +64,12 @@ export function PolicyForm<S extends z.ZodType<any, any>>(props: FormProps<S> & 
         }}
       </OnChange>
       <LabeledSelectField name="resource_id" label="Resource" options={resources.map((resource) => { return { label: resource.name, value: resource.id.toString() } })} />
-      <LabeledCheckboxGroup onSelectionChange={(selected) => { props.onActionsListChange(selected.map((value) => { return { name: value.label, id: parseInt(value.value) } })) }} name="testCheckbox" label="Test" options={actions.map((action) => { return { label: action.name, value: action.id.toString() } })} />
+      <LabeledCheckboxGroup
+        onSelectionChange={(x: Array<string>) => props.onActionsListChange(x.map(y => parseInt(y)))}
+        name="testCheckbox"
+        label="Test"
+        options={actions.map((action) => { return { label: action.name, value: action.id.toString() } })}
+      />
     </Form>
   );
 }

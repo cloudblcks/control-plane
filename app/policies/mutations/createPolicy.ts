@@ -16,6 +16,7 @@ export default resolver.pipe(
   async (input) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
 
+    const policyActionIdObjs = input.action_ids.map((x) => {return {action_id: x}})
     const policyData = {
       name: input.name,
       provider_account_id: input.provider_account_id,
@@ -27,7 +28,7 @@ export default resolver.pipe(
         ]
       },
       PolicyActions: {
-        create: input.action_ids.map((id) => {action_id: id})
+        create: policyActionIdObjs
       }
     }
 

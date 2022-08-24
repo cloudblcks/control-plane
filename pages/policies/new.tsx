@@ -24,9 +24,9 @@ const NewPolicyPage = () => {
   const [selectedActions, setSelectedActions] = useState(Array<number>())
   const [isPending, startTransition] = useTransition();
 
-  const onSelectedActionsListChange = (selected: Array<{ name: string, id: number }>) => {
+  const onSelectedActionsListChange = (selected: Array<number>) => {
     startTransition(() => {
-      setSelectedActions(selected.map((x) => x.id))
+      setSelectedActions(selected)
     })
   }
 

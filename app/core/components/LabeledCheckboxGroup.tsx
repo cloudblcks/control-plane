@@ -12,7 +12,7 @@ export interface LabeledSelectProps extends PropsWithoutRef<JSX.IntrinsicElement
   /** Field label. */
   label: string
   options: Array<LabeledCheckboxGroupOption>
-  onSelectionChange: (selected: Array<LabeledCheckboxGroupOption>) => void
+  onSelectionChange: (selected: Array<string>) => void
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
   labelProps?: ComponentPropsWithoutRef<"label">
   fieldProps?: UseFieldConfig<string>
@@ -47,7 +47,7 @@ export const LabeledCheckboxGroup = forwardRef<HTMLSelectElement, LabeledSelectP
     const [selectedValue, setSelectedValue] = useState([])
     function handleChange(event) {
       setSelectedValue(event.target.value);
-      props.onSelectionChange(selectedValue)
+      props.onSelectionChange(event.target.value as Array<string>)
     }
 
     return (

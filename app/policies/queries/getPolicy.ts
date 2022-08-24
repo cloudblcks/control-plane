@@ -13,7 +13,10 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const policy = await db.policy.findFirst({ where: { id } });
+    const policy = await db.policy.findFirst({ where: { id }, include: {
+      PolicyActions: true,
+      PolicyResources: true
+    } });
 
     if (!policy) throw new NotFoundError();
 
