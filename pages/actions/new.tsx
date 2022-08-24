@@ -7,6 +7,7 @@ import createAction from "app/actions/mutations/createAction";
 import { ActionForm, FORM_ERROR } from "app/actions/components/ActionForm";
 import { useCurrentUser } from "app/core/hooks/useCurrentUser";
 import getProviders from "app/providers/queries/getProviders";
+import { Suspense } from "react";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -24,38 +25,39 @@ const NewActionPage = () => {
   return (
     <Layout title={"Create New Action"}>
       <h1>Create New Action</h1>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ActionForm
+          submitText="Create Action"
+          // TODO use a zod schema for form validation
+          //  - Tip: extract mutation's schema into a shared `validations.ts` file and
+          //         then import and use it here
+          // schema={CreateAction}
+          // initialValues={{}}
+          options={providers.map((item) => {
+            return { label: item.name, value: item.id.toString() }
+          })}
+          onSubmit={async (values) => {
+            try {
+              const action = await createActionMutation({
+                name: values.name,
+                provider_id: parseInt(values.provider_id)
+              });
+              void router.push(Routes.ShowActionPage({ actionId: action.id }));
+            } catch (error: any) {
+              console.error(error);
+              return {
+                [FORM_ERROR]: error.toString(),
+              };
+            }
+          }}
+        />
 
-      <ActionForm
-        submitText="Create Action"
-        // TODO use a zod schema for form validation
-        //  - Tip: extract mutation's schema into a shared `validations.ts` file and
-        //         then import and use it here
-        // schema={CreateAction}
-        // initialValues={{}}
-        options={providers.map((item) => {
-          return { label: item.name, value: item.id.toString() }
-        })}
-        onSubmit={async (values) => {
-          try {
-            const action = await createActionMutation({
-              name: values.name,
-              provider_id: parseInt(values.provider_id)
-            });
-            void router.push(Routes.ShowActionPage({ actionId: action.id }));
-          } catch (error: any) {
-            console.error(error);
-            return {
-              [FORM_ERROR]: error.toString(),
-            };
-          }
-        }}
-      />
-
-      <p>
-        <Link href={Routes.ActionsPage()}>
-          <a>Actions</a>
-        </Link>
-      </p>
+        <p>
+          <Link href={Routes.ActionsPage()}>
+            <a>Actions</a>
+          </Link>
+        </p>
+      </Suspense>
     </Layout>
   );
 };
