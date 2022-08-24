@@ -41,8 +41,7 @@ const NewResourcePage = () => {
           try {
             const resource = await createResourceMutation({
               name: values.name,
-              provider_account_id: parseInt(values.provider_account_id),
-              userId: currentUser.id
+              provider_account_id: parseInt(values.provider_account_id)
             });
             void router.push(Routes.ShowResourcePage({ resourceId: resource.id }));
           } catch (error: any) {
