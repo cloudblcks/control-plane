@@ -13,7 +13,18 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const accessRole = await db.accessRole.findFirst({ where: { id } });
+    const accessRole = await db.accessRole.findFirst({ where: { id }, include: {
+      ResourceAccessRoles: {
+        include: {
+          resource: true
+        }
+      },
+      AccessRolePolicies: {
+        include: {
+          policy: true
+        }
+      }
+    } });
 
     if (!accessRole) throw new NotFoundError();
 

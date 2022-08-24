@@ -20,7 +20,7 @@ model ResourceAccessRoles {
   id             Int        @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
   access_role_id Int
   resource_id    Int
-  credentials    String     @db.VarChar(255)
+  credentials    String?    @db.VarChar(255)
   resource       Resource   @relation(fields: [resource_id], references: [id])
   access_role    AccessRole @relation(fields: [access_role_id], references: [id])
 }

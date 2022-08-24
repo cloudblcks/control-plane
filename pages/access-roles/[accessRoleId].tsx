@@ -26,8 +26,8 @@ export const AccessRole = () => {
         <h1>AccessRole {accessRole.id}</h1>
         <pre>{JSON.stringify(accessRole, null, 2)}</pre>
 
-        <Link href={Routes.EditAccessRolePage({ accessRoleId: accessRole.id })}>
-          <a>Edit</a>
+        <Link href={Routes.AssignAccessRolePage({ accessRoleId: accessRole.id })}>
+          <a>Assign to a resource</a>
         </Link>
 
         <button

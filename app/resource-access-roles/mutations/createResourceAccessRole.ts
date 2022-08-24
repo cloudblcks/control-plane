@@ -2,19 +2,18 @@ import { resolver } from "@blitzjs/rpc";
 import db from "db";
 import { z } from "zod";
 
-const CreateAccessRoleAssignment = z.object({
-  name: z.string(),
+const CreateResourceAccessRole = z.object({
+  access_role_id: z.number(),
+  resource_id: z.number()
 });
 
 export default resolver.pipe(
-  resolver.zod(CreateAccessRoleAssignment),
+  resolver.zod(CreateResourceAccessRole),
   resolver.authorize(),
   async (input) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const accessRoleAssignment = await db.accessRoleAssignment.create({
-      data: input,
-    });
+    const resourceAccessRole = await db.resourceAccessRoles.create({ data: input });
 
-    return accessRoleAssignment;
+    return resourceAccessRole;
   }
 );
