@@ -51,7 +51,7 @@ export const EditProvider = () => {
                 ...values,
               });
               await setQueryData(updated);
-              router.push(Routes.ShowProviderPage({ providerId: updated.id }));
+              void router.push(Routes.ShowProviderPage({ providerId: updated.id }));
             } catch (error: any) {
               console.error(error);
               return {

@@ -35,7 +35,7 @@ export const Action = () => {
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
               await deleteActionMutation({ id: action.id });
-              router.push(Routes.ActionsPage());
+              void router.push(Routes.ActionsPage());
             }
           }}
           style={{ marginLeft: "0.5rem" }}

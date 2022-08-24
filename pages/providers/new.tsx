@@ -27,7 +27,7 @@ const NewProviderPage = () => {
         onSubmit={async (values) => {
           try {
             const provider = await createProviderMutation(values);
-            router.push(Routes.ShowProviderPage({ providerId: provider.id }));
+            void router.push(Routes.ShowProviderPage({ providerId: provider.id }));
           } catch (error: any) {
             console.error(error);
             return {

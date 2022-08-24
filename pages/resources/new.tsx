@@ -44,7 +44,7 @@ const NewResourcePage = () => {
               provider_account_id: parseInt(values.provider_account_id),
               userId: currentUser.id
             });
-            router.push(Routes.ShowResourcePage({ resourceId: resource.id }));
+            void router.push(Routes.ShowResourcePage({ resourceId: resource.id }));
           } catch (error: any) {
             console.error(error);
             return {

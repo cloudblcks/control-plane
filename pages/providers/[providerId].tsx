@@ -35,7 +35,7 @@ export const Provider = () => {
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
               await deleteProviderMutation({ id: provider.id });
-              router.push(Routes.ProvidersPage());
+              void router.push(Routes.ProvidersPage());
             }
           }}
           style={{ marginLeft: "0.5rem" }}

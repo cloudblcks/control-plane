@@ -62,7 +62,7 @@ export const EditAction = () => {
                 provider_id: parseInt(values.provider_id),
               });
               await setQueryData(updated);
-              router.push(Routes.ShowActionPage({ actionId: updated.id }));
+              void router.push(Routes.ShowActionPage({ actionId: updated.id }));
             } catch (error: any) {
               console.error(error);
               return {

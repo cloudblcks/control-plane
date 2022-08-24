@@ -41,7 +41,7 @@ const NewActionPage = () => {
               name: values.name,
               provider_id: parseInt(values.provider_id)
             });
-            router.push(Routes.ShowActionPage({ actionId: action.id }));
+            void router.push(Routes.ShowActionPage({ actionId: action.id }));
           } catch (error: any) {
             console.error(error);
             return {
