@@ -11,7 +11,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const resourceAccessRole = await db.resourceAccessRole.deleteMany({
+    const resourceAccessRole = await db.resourceAccessRoles.deleteMany({
       where: { id },
     });
 
