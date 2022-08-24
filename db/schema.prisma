@@ -10,15 +10,13 @@ datasource db {
 }
 
 model AccessRole {
-  id                    Int                     @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
-  name                  String                  @db.VarChar(255)
-  AccessRoleAssignments AccessRoleAssignments[]
-  AccessRolePolicies    AccessRolePolicies[]
-  user                  User                    @relation(fields: [userId], references: [id])
-  userId                Int
+  id                 Int                   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  name               String                @db.VarChar(255)
+  ResourceAccessRole ResourceAccessRoles[]
+  AccessRolePolicies AccessRolePolicies[]
 }
 
-model AccessRoleAssignments {
+model ResourceAccessRoles {
   id             Int        @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
   access_role_id Int
   resource_id    Int
@@ -51,8 +49,6 @@ model Policy {
   AccessRolePolicies  AccessRolePolicies[]
   PolicyActions       PolicyActions[]
   PolicyResources     PolicyResources[]
-  user                User                 @relation(fields: [userId], references: [id])
-  userId              Int
 }
 
 model PolicyActions {
@@ -92,14 +88,12 @@ model ProviderAccount {
 }
 
 model Resource {
-  id                    Int                     @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
-  name                  String                  @db.VarChar(255)
-  provider_account_id   Int
-  provider_account      ProviderAccount         @relation(fields: [provider_account_id], references: [id])
-  AccessRoleAssignments AccessRoleAssignments[]
-  PolicyResources       PolicyResources[]
-  user                  User                    @relation(fields: [userId], references: [id])
-  userId                Int
+  id                  Int                   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  name                String                @db.VarChar(255)
+  provider_account_id Int
+  provider_account    ProviderAccount       @relation(fields: [provider_account_id], references: [id])
+  ResourceAccessRole  ResourceAccessRoles[]
+  PolicyResources     PolicyResources[]
 }
 
 model User {
@@ -112,10 +106,7 @@ model User {
   role            String            @default("user")
   sessions        Session[]
   tokens          Token[]
-  AccessRole      AccessRole[]
-  Policy          Policy[]
   ProviderAccount ProviderAccount[]
-  Resource        Resource[]
 }
 
 model Session {
@@ -144,34 +135,4 @@ model Token {
   userId      Int
 
   @@unique([hashedToken, type])
-}
-
-model Role {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AccessRoleAssignment {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AccessRolePolicy {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model PolicyAction {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model PolicyResource {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
