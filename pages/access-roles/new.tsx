@@ -46,7 +46,7 @@ const NewAccessRolePage = () => {
               name: values.name,
               policy_ids: selectedPolicies
             });
-            router.push(
+            void router.push(
               Routes.ShowAccessRolePage({ accessRoleId: accessRole.id })
             );
           } catch (error: any) {

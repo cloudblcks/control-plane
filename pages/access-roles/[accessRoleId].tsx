@@ -35,7 +35,7 @@ export const AccessRole = () => {
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
               await deleteAccessRoleMutation({ id: accessRole.id });
-              router.push(Routes.AccessRolesPage());
+              void router.push(Routes.AccessRolesPage());
             }
           }}
           style={{ marginLeft: "0.5rem" }}

@@ -60,7 +60,7 @@ export const AssignAccessRole = () => {
                 access_role_id: accessRole.id,
                 resource_id: parseInt(values.resource_id)
               });
-              router.push(
+              void router.push(
                 Routes.ShowAccessRolePage({ accessRoleId: accessRole.id })
               );
             } catch (error: any) {
