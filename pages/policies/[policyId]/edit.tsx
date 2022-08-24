@@ -34,7 +34,7 @@ export const EditPolicy = () => {
         <h1>Edit Policy {policy.id}</h1>
         <pre>{JSON.stringify(policy, null, 2)}</pre>
 
-        <PolicyForm
+        {/* <PolicyForm
           submitText="Update Policy"
           // TODO use a zod schema for form validation
           //  - Tip: extract mutation's schema into a shared `validations.ts` file and
@@ -48,7 +48,7 @@ export const EditPolicy = () => {
                 ...values,
               });
               await setQueryData(updated);
-              router.push(Routes.ShowPolicyPage({ policyId: updated.id }));
+              void router.push(Routes.ShowPolicyPage({ policyId: updated.id }));
             } catch (error: any) {
               console.error(error);
               return {
@@ -56,7 +56,7 @@ export const EditPolicy = () => {
               };
             }
           }}
-        />
+        /> */}
       </div>
     </>
   );

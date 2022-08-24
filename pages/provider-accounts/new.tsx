@@ -47,7 +47,7 @@ const NewProviderAccountPage = () => {
                 user: currentUser.id,
                 credentials: values.credentials
               });
-              router.push(
+              void router.push(
                 Routes.ShowProviderAccountPage({
                   providerAccountId: providerAccount.id,
                 })

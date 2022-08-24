@@ -71,7 +71,7 @@ export const EditProviderAccount = () => {
                   credentials: values.credentials
                 });
                 await setQueryData(updated);
-                router.push(
+                void router.push(
                   Routes.ShowProviderAccountPage({
                     providerAccountId: updated.id,
                   })

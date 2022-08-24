@@ -35,7 +35,7 @@ export const Resource = () => {
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
               await deleteResourceMutation({ id: resource.id });
-              router.push(Routes.ResourcesPage());
+              void router.push(Routes.ResourcesPage());
             }
           }}
           style={{ marginLeft: "0.5rem" }}

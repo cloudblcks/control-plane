@@ -58,7 +58,7 @@ const NewPolicyPage = () => {
               resource_id: parseInt(values.resource_id),
               action_ids: selectedActions
             });
-            router.push(Routes.ShowPolicyPage({ policyId: policy.id }));
+            void router.push(Routes.ShowPolicyPage({ policyId: policy.id }));
           } catch (error: any) {
             console.error(error);
             return {

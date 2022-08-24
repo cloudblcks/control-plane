@@ -35,7 +35,7 @@ export const Policy = () => {
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
               await deletePolicyMutation({ id: policy.id });
-              router.push(Routes.PoliciesPage());
+              void router.push(Routes.PoliciesPage());
             }
           }}
           style={{ marginLeft: "0.5rem" }}

@@ -63,10 +63,10 @@ export const EditResource = () => {
                 id: resource.id,
                 name: values.name,
                 provider_account_id: parseInt(values.provider_account_id),
-                userId: currentUser.id
+                userId: currentUser!.id
               });
               await setQueryData(updated);
-              router.push(Routes.ShowResourcePage({ resourceId: updated.id }));
+              void router.push(Routes.ShowResourcePage({ resourceId: updated.id }));
             } catch (error: any) {
               console.error(error);
               return {

@@ -41,7 +41,7 @@ export const ProviderAccount = () => {
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
               await deleteProviderAccountMutation({ id: providerAccount.id });
-              router.push(Routes.ProviderAccountsPage());
+              void router.push(Routes.ProviderAccountsPage());
             }
           }}
           style={{ marginLeft: "0.5rem" }}
