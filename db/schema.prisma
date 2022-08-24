@@ -10,10 +10,10 @@ datasource db {
 }
 
 model AccessRole {
-  id                 Int                   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
-  name               String                @db.VarChar(255)
-  ResourceAccessRole ResourceAccessRoles[]
-  AccessRolePolicies AccessRolePolicies[]
+  id                  Int                   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  name                String                @db.VarChar(255)
+  ResourceAccessRoles ResourceAccessRoles[]
+  AccessRolePolicies  AccessRolePolicies[]
 }
 
 model ResourceAccessRoles {
