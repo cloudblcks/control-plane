@@ -10,10 +10,11 @@ import {
 } from "app/provider-accounts/components/ProviderAccountForm";
 import getProviders from "app/providers/queries/getProviders";
 import { useCurrentUser } from "app/core/hooks/useCurrentUser";
+import { Suspense } from "react";
 
 const ITEMS_PER_PAGE = 100;
 
-const NewProviderAccountPage = () => {
+const NewProviderAccount = () => {
 
   const router = useRouter();
   const [createProviderAccountMutation] = useMutation(createProviderAccount);
@@ -26,7 +27,7 @@ const NewProviderAccountPage = () => {
   const currentUser = useCurrentUser()
   if (currentUser) {
     return (
-      <Layout title={"Create New ProviderAccount"}>
+      <>
         <h1>Create New ProviderAccount</h1>
 
         <ProviderAccountForm
@@ -61,22 +62,33 @@ const NewProviderAccountPage = () => {
           }}
         />
 
-        <p>
-          <Link href={Routes.ProviderAccountsPage()}>
-            <a>ProviderAccounts</a>
-          </Link>
-        </p>
-      </Layout>
+
+      </>
     );
   } else {
     return <> </>
   }
 };
 
+
+const NewProviderAccountPage = () => {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <NewProviderAccount />
+      </Suspense>
+
+      <p>
+        <Link href={Routes.ProviderAccountsPage()}>
+          <a>ProviderAccounts</a>
+        </Link>
+      </p>
+    </div>
+  );
+};
+
 NewProviderAccountPage.authenticate = true;
+NewProviderAccountPage.getLayout = (page) => <Layout>{page}</Layout>;
+
 
 export default NewProviderAccountPage;
-function LabeledSelectOption(name: string, id: number): any {
-  throw new Error("Function not implemented.");
-}
-

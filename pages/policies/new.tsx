@@ -8,11 +8,11 @@ import { PolicyForm, FORM_ERROR } from "app/policies/components/PolicyForm";
 import getProviders from "app/providers/queries/getProviders";
 import { useCurrentUser } from "app/core/hooks/useCurrentUser";
 import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 
 const ITEMS_PER_PAGE = 100;
 
-const NewPolicyPage = () => {
+const NewPolicy = () => {
   const router = useRouter();
   const [createPolicyMutation] = useMutation(createPolicy);
   const page = Number(router.query.page) || 0;
@@ -31,7 +31,7 @@ const NewPolicyPage = () => {
   }
 
   return (
-    <Layout title={"Create New Policy"}>
+    <>
       <h1>Create New Policy</h1>
 
       <PolicyForm
@@ -68,15 +68,29 @@ const NewPolicyPage = () => {
         }}
       />
 
+
+    </>
+  );
+};
+
+const NewPolicyPage = () => {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <NewPolicy />
+      </Suspense>
+
       <p>
         <Link href={Routes.PoliciesPage()}>
           <a>Policies</a>
         </Link>
       </p>
-    </Layout>
+    </div>
   );
 };
 
 NewPolicyPage.authenticate = true;
+NewPolicyPage.getLayout = (page) => <Layout>{page}</Layout>;
+
 
 export default NewPolicyPage;

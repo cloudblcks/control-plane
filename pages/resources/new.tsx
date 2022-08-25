@@ -10,10 +10,11 @@ import {
 } from "app/resources/components/ResourceForm";
 import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
 import { useCurrentUser } from "app/core/hooks/useCurrentUser";
+import { Suspense } from "react";
 
 const ITEMS_PER_PAGE = 100;
 
-const NewResourcePage = () => {
+const NewResource = () => {
   const router = useRouter();
   const [createResourceMutation] = useMutation(createResource);
   const page = Number(router.query.page) || 0;
@@ -24,7 +25,7 @@ const NewResourcePage = () => {
   });
   const currentUser = useCurrentUser()
   return (
-    <Layout title={"Create New Resource"}>
+    <>
       <h1>Create New Resource</h1>
 
       <ResourceForm
@@ -53,15 +54,31 @@ const NewResourcePage = () => {
         }}
       />
 
+
+    </>
+  );
+};
+
+
+
+const NewResourcePage = () => {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <NewResource />
+      </Suspense>
+
       <p>
         <Link href={Routes.ResourcesPage()}>
           <a>Resources</a>
         </Link>
       </p>
-    </Layout>
+    </div>
   );
 };
 
 NewResourcePage.authenticate = true;
+NewResourcePage.getLayout = (page) => <Layout>{page}</Layout>;
+
 
 export default NewResourcePage;

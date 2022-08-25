@@ -9,13 +9,13 @@ import {
   FORM_ERROR,
 } from "app/access-roles/components/AccessRoleForm";
 import getPolicies from "app/policies/queries/getPolicies";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 
 
 const ITEMS_PER_PAGE = 100;
 
 
-const NewAccessRolePage = () => {
+const NewAccessRole = () => {
   const router = useRouter();
   const [createAccessRoleMutation] = useMutation(createAccessRole);
   const [{ policies, hasMore }] = usePaginatedQuery(getPolicies, {
@@ -33,7 +33,7 @@ const NewAccessRolePage = () => {
   }
 
   return (
-    <Layout title={"Create New AccessRole"}>
+    <>
       <h1>Create New AccessRole</h1>
 
       <AccessRoleForm
@@ -58,15 +58,30 @@ const NewAccessRolePage = () => {
         }}
       />
 
+
+    </>
+  );
+};
+
+
+const NewAccessRolePage = () => {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <NewAccessRole />
+      </Suspense>
+
       <p>
         <Link href={Routes.AccessRolesPage()}>
           <a>AccessRoles</a>
         </Link>
       </p>
-    </Layout>
+    </div>
   );
 };
 
 NewAccessRolePage.authenticate = true;
+NewAccessRolePage.getLayout = (page) => <Layout>{page}</Layout>;
+
 
 export default NewAccessRolePage;

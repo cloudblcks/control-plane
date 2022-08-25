@@ -8,13 +8,14 @@ import {
   ProviderForm,
   FORM_ERROR,
 } from "app/providers/components/ProviderForm";
+import { Suspense } from "react";
 
-const NewProviderPage = () => {
+const NewProvider = () => {
   const router = useRouter();
   const [createProviderMutation] = useMutation(createProvider);
 
   return (
-    <Layout title={"Create New Provider"}>
+    <>
       <h1>Create New Provider</h1>
 
       <ProviderForm
@@ -37,15 +38,30 @@ const NewProviderPage = () => {
         }}
       />
 
+
+    </>
+  );
+};
+
+
+const NewProviderPage = () => {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <NewProvider />
+      </Suspense>
+
       <p>
         <Link href={Routes.ProvidersPage()}>
           <a>Providers</a>
         </Link>
       </p>
-    </Layout>
+    </div>
   );
 };
 
 NewProviderPage.authenticate = true;
+NewProviderPage.getLayout = (page) => <Layout>{page}</Layout>;
+
 
 export default NewProviderPage;
