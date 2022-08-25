@@ -15,6 +15,7 @@ import { Routes, BlitzPage } from "@blitzjs/next"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
+  console.log("Current user: " + currentUser)
   const [logoutMutation] = useMutation(logout)
 
   if (currentUser) {
