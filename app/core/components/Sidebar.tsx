@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code } from '@mantine/core';
+import { createStyles, Navbar, Group, Code, NavbarProps } from '@mantine/core';
 import {
   IconBellRinging,
   IconFingerprint,
@@ -81,7 +81,7 @@ const data = [
   { link: '/access-roles', label: 'Access Roles', icon: IconSettings },
 ];
 
-export interface SidebarProps {
+export interface SidebarProps extends NavbarProps {
   logoutMutation: () => void;
 }
 
@@ -102,7 +102,7 @@ export function Sidebar(props: SidebarProps) {
   ));
 
   return (
-    <Navbar width={{ sm: 300 }} p="md">
+    <Navbar {...props}>
       <Navbar.Section grow>
         {links}
       </Navbar.Section>

@@ -6,8 +6,8 @@ import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getProviders from "app/providers/queries/getProviders";
-import { Button } from "@mantine/core";
-import Sidebar from "app/core/components/Sidebar";
+import { Button, Table, Container, Group, Text, Center } from "@mantine/core";
+import ProviderItem from "app/providers/components/ProviderItem";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -24,41 +24,57 @@ export const ProvidersList = () => {
   const goToNextPage = () => router.push({ query: { page: page + 1 } });
 
   return (
-    <div>
-      <ul>
-        {providers.map((provider) => (
-          <li key={provider.id}>
-            <Link href={Routes.ShowProviderPage({ providerId: provider.id })}>
-              <a>{provider.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <button disabled={page === 0} onClick={goToPreviousPage}>
-        Previous
-      </button>
-      <button disabled={!hasMore} onClick={goToNextPage}>
-        Next
-      </button>
-    </div>
+    <Container>
+      <Table verticalSpacing="lg" striped>
+        <thead>
+          <tr>
+            <th><Text>Name</Text></th>
+            <th><Text>Category</Text></th>
+            <th><Text align="right">Actions</Text></th>
+          </tr>
+        </thead>
+        <tbody>
+          {providers.map((provider) => (
+            <tr key={provider.id}>
+              <td>{provider.name}</td>
+              <td>{provider.category}</td>
+              <td>
+                <Group position="right">
+                  <Link href={Routes.ShowProviderPage({ providerId: provider.id })}>
+                    <Button variant="outline" component="a">View</Button>
+                  </Link>
+                  <Button variant="default">Delete</Button>
+                </Group>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <Group position="apart">
+        <Group position="left">
+          <Button disabled={page === 0} onClick={goToPreviousPage}>
+            Previous
+          </Button>
+          <Button disabled={!hasMore} onClick={goToNextPage}>
+            Next
+          </Button>
+        </Group>
+        <Link href={Routes.NewProviderPage()}>
+          <Button component="a">Create New Provider</Button>
+        </Link>
+      </Group>
+    </Container>
   );
 };
 
 const ProvidersPage = () => {
   return (
-    <AuthorizedLayout>
+    <AuthorizedLayout title="Providers">
       <Head>
         <title>Providers</title>
       </Head>
 
       <div>
-        <p>
-          <Link href={Routes.NewProviderPage()}>
-            <Button component="a">Create Provider</Button>
-          </Link>
-        </p>
-
         <Suspense fallback={<div>Loading...</div>}>
           <ProvidersList />
         </Suspense>
