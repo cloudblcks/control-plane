@@ -1,68 +1,46 @@
+import { Button, MantineProvider } from "@mantine/core"
 import Link from "next/link"
 
 export const Header = () => {
   return (
-    <div className="buttons" style={{ marginTop: "5rem" }}>
-      <Link href="/">
-        <a
-          className="button"
-          rel="noopener noreferrer"
-        >
+    <div className="buttons" style={{ marginTop: "1rem" }}>
+      <Link href="/" passHref>
+        <Button component="a" >
           Home
-        </a>
+        </Button>
       </Link>
       <Link href="/providers">
-        <a
-          className="button-outline"
-          rel="noopener noreferrer"
-        >
+        <Button component="a">
           Providers
-        </a>
+        </Button>
       </Link>
       <Link href="/provider-accounts">
-        <a
-          className="button-outline"
-          rel="noopener noreferrer"
-        >
+        <Button component="a">
           Connected Accounts
-        </a>
+        </Button>
       </Link>
       <Link href="/actions">
-        <a
-          className="button-outline"
-          rel="noopener noreferrer"
-        >
+        <Button component="a">
           Actions
-        </a>
+        </Button>
       </Link>
       <Link href="/resources">
-        <a
-          className="button-outline"
-          rel="noopener noreferrer"
-        >
+        <Button component="a">
           Resources
-        </a>
+        </Button>
       </Link>
       <Link href="/policies">
-        <a
-          className="button-outline"
-          rel="noopener noreferrer"
-        >
+        <Button component="a">
           Policies
-        </a>
+        </Button>
       </Link>
       <Link href="/access-roles">
-        <a
-          className="button-outline"
-          rel="noopener noreferrer"
-        >
+        <Button component="a">
           Access Roles
-        </a>
+        </Button>
       </Link>
-    </div>
+    </div >
   )
 }
-
-
 
 export default Header

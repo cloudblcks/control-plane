@@ -2,7 +2,9 @@ import { ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps } from "@bl
 import { AuthenticationError, AuthorizationError } from "blitz"
 import React from "react"
 import { withBlitz } from "app/blitz-client"
+import { MantineProvider } from '@mantine/core';
 import "../public/styles.css"
+import Header from "app/core/components/Header";
 
 function RootErrorFallback({ error }: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
@@ -27,8 +29,17 @@ function RootErrorFallback({ error }: ErrorFallbackProps) {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      <Component {...pageProps} />
-    </ErrorBoundary>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          /** Put your mantine theme override here */
+          colorScheme: 'light',
+        }}>
+        <Header />
+        <Component {...pageProps} />
+      </MantineProvider>
+    </ErrorBoundary >
   )
 }
 

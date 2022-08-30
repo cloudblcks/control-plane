@@ -1,5 +1,8 @@
+import { createGetInitialProps } from '@mantine/next';
 import Header from 'app/core/components/Header';
 import Document, { Html, Main, NextScript, Head } from 'next/document';
+
+const getInitialProps = createGetInitialProps();
 
 class MyDocument extends Document {
   // Only uncomment if you need to customize this behaviour
@@ -7,12 +10,14 @@ class MyDocument extends Document {
   //   const initialProps = await Document.getInitialProps(ctx)
   //   return {...initialProps}
   // }
+  static getInitialProps = getInitialProps;
+
   render() {
     return (
       <Html lang="en">
         <Head />
         <body>
-          <Header />
+
           <Main />
           <NextScript />
         </body>

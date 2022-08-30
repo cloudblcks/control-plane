@@ -6,6 +6,7 @@ import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
 import Layout from "app/core/layouts/Layout";
 import getProviders from "app/providers/queries/getProviders";
+import { Button } from "@mantine/core";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -53,7 +54,7 @@ const ProvidersPage = () => {
       <div>
         <p>
           <Link href={Routes.NewProviderPage()}>
-            <a>Create Provider</a>
+            <Button component="a">Create Provider</Button>
           </Link>
         </p>
 
