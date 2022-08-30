@@ -7,6 +7,7 @@ import { BlitzPage, Routes } from "@blitzjs/next"
 import { useRouter } from "next/router"
 import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
+import UnauthorizedLayout from "app/core/layouts/UnauthorizedLayout"
 
 const ResetPasswordPage: BlitzPage = () => {
   const router = useRouter()
