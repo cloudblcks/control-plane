@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useQuery, useMutation } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getAccessRole from "app/access-roles/queries/getAccessRole";
 import updateAccessRole from "app/access-roles/mutations/updateAccessRole";
 import {
@@ -93,6 +93,6 @@ const AssignAccessRolePage = () => {
 };
 
 AssignAccessRolePage.authenticate = true;
-AssignAccessRolePage.getLayout = (page) => <Layout>{page}</Layout>;
+AssignAccessRolePage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 export default AssignAccessRolePage;

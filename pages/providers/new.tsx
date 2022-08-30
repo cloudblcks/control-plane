@@ -2,7 +2,7 @@ import { Routes } from "@blitzjs/next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMutation } from "@blitzjs/rpc";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import createProvider from "app/providers/mutations/createProvider";
 import {
   ProviderForm,
@@ -61,7 +61,7 @@ const NewProviderPage = () => {
 };
 
 NewProviderPage.authenticate = true;
-NewProviderPage.getLayout = (page) => <Layout>{page}</Layout>;
+NewProviderPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 
 export default NewProviderPage;

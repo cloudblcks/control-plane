@@ -1,12 +1,13 @@
 import { Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import Layout from "app/core/layouts/Layout"
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes, BlitzPage } from "@blitzjs/next"
+import { Button, Container, Title, Text, Anchor, Paper, Center } from "@mantine/core"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -21,19 +22,24 @@ const UserInfo = () => {
   if (currentUser) {
     return (
       <>
-        <button
-          className="button small"
-          onClick={async () => {
-            await logoutMutation()
-          }}
-        >
-          Logout
-        </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
+
+        <Text color="dimmed" size="sm" align="center" mt={5}>
+          <div>
+            User id: <code>{currentUser.id}</code>
+            <br />
+            User role: <code>{currentUser.role}</code>
+          </div>
+        </Text>
+        <Center my={5}>
+          <Button
+            color="red"
+            onClick={async () => {
+              await logoutMutation()
+            }}
+          >
+            Logout
+          </Button>
+        </Center>
       </>
     )
   } else {
@@ -56,32 +62,30 @@ const UserInfo = () => {
 
 const Home: BlitzPage = () => {
   return (
-    <Layout title="Home">
-      <div className="container">
-        <main>
-          <p>
-            <strong>Welcome to Cloudblocks!</strong> Here you can configure IAM roles and policies for all your managed, serverless and PaaS infrastrucutre!
-          </p>
-          <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-            <Suspense fallback="Loading...">
-              <UserInfo />
-            </Suspense>
-          </div>
-        </main>
+    <AuthorizedLayout title="Home">
+      <Container size={420} my={40}>
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+        >
+          Welcome to Cloudblocks!
+        </Title>
+        <Text color="dimmed" size="sm" align="center" mt={5}>
+          Here you can configure IAM roles and policies for all your managed, serverless and PaaS infrastrucutre.
 
-        <footer>
-          <a
-            href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Powered by Blitz.js
-          </a>
-        </footer>
+        </Text>
 
-      </div>
-    </Layout>
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <Suspense fallback="Loading...">
+            <UserInfo />
+          </Suspense>
+        </Paper>
+      </Container>
+
+    </AuthorizedLayout >
   )
 }
+
+Home.authenticate = { redirectTo: Routes.LoginPage() }
 
 export default Home

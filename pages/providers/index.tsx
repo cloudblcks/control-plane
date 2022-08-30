@@ -4,9 +4,10 @@ import Head from "next/head";
 import Link from "next/link";
 import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getProviders from "app/providers/queries/getProviders";
 import { Button } from "@mantine/core";
+import Sidebar from "app/core/components/Sidebar";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -46,7 +47,7 @@ export const ProvidersList = () => {
 
 const ProvidersPage = () => {
   return (
-    <Layout>
+    <AuthorizedLayout>
       <Head>
         <title>Providers</title>
       </Head>
@@ -62,7 +63,7 @@ const ProvidersPage = () => {
           <ProvidersList />
         </Suspense>
       </div>
-    </Layout>
+    </AuthorizedLayout>
   );
 };
 

@@ -1,4 +1,4 @@
-import Layout from "app/core/layouts/Layout"
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ResetPassword } from "app/auth/validations"
@@ -57,6 +57,6 @@ const ResetPasswordPage: BlitzPage = () => {
 }
 
 ResetPasswordPage.redirectAuthenticatedTo = "/"
-ResetPasswordPage.getLayout = (page) => <Layout title="Reset Your Password">{page}</Layout>
+ResetPasswordPage.getLayout = (page) => <UnauthorizedLayout title="Reset Your Password">{page}</UnauthorizedLayout>
 
 export default ResetPasswordPage
