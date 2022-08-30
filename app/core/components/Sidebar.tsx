@@ -102,7 +102,7 @@ export function Sidebar(props: SidebarProps) {
   ));
 
   return (
-    <Navbar height={700} width={{ sm: 300 }} p="md">
+    <Navbar width={{ sm: 300 }} p="md">
       <Navbar.Section grow>
         {links}
       </Navbar.Section>
