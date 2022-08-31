@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getAccessRoles from "app/access-roles/queries/getAccessRoles";
 
 const ITEMS_PER_PAGE = 100;
@@ -47,7 +47,7 @@ export const AccessRolesList = () => {
 
 const AccessRolesPage = () => {
   return (
-    <Layout>
+    <AuthorizedLayout>
       <Head>
         <title>AccessRoles</title>
       </Head>
@@ -63,7 +63,7 @@ const AccessRolesPage = () => {
           <AccessRolesList />
         </Suspense>
       </div>
-    </Layout>
+    </AuthorizedLayout>
   );
 };
 

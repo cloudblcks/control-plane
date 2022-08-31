@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
 
 const ITEMS_PER_PAGE = 100;
@@ -52,7 +52,7 @@ export const ProviderAccountsList = () => {
 
 const ProviderAccountsPage = () => {
   return (
-    <Layout>
+    <AuthorizedLayout>
       <Head>
         <title>ProviderAccounts</title>
       </Head>
@@ -68,7 +68,7 @@ const ProviderAccountsPage = () => {
           <ProviderAccountsList />
         </Suspense>
       </div>
-    </Layout>
+    </AuthorizedLayout>
   );
 };
 

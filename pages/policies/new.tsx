@@ -2,7 +2,7 @@ import { Routes } from "@blitzjs/next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMutation, usePaginatedQuery, useQuery } from "@blitzjs/rpc";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import createPolicy from "app/policies/mutations/createPolicy";
 import { PolicyForm, FORM_ERROR } from "app/policies/components/PolicyForm";
 import getProviders from "app/providers/queries/getProviders";
@@ -90,7 +90,7 @@ const NewPolicyPage = () => {
 };
 
 NewPolicyPage.authenticate = true;
-NewPolicyPage.getLayout = (page) => <Layout>{page}</Layout>;
+NewPolicyPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 
 export default NewPolicyPage;

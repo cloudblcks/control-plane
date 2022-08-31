@@ -2,7 +2,7 @@ import { Routes } from "@blitzjs/next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMutation, usePaginatedQuery } from "@blitzjs/rpc";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import createProviderAccount from "app/provider-accounts/mutations/createProviderAccount";
 import {
   ProviderAccountForm,
@@ -88,7 +88,7 @@ const NewProviderAccountPage = () => {
 };
 
 NewProviderAccountPage.authenticate = true;
-NewProviderAccountPage.getLayout = (page) => <Layout>{page}</Layout>;
+NewProviderAccountPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 
 export default NewProviderAccountPage;

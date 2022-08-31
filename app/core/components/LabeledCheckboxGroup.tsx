@@ -1,10 +1,9 @@
+import { MultiSelect } from "@mantine/core"
 import { configOptions } from "final-form"
-import { Chip, FormControl, Input, InputLabel, MenuItem, Select } from "material-ui-core"
 import PageLoader from "next/dist/client/page-loader"
 import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef, useState, Suspense } from "react"
 import { useField, UseFieldConfig } from "react-final-form"
 import { optional } from "zod"
-// import FormControl from "material-ui/core/FormControl"
 
 export interface LabeledSelectProps extends PropsWithoutRef<JSX.IntrinsicElements["select"]> {
   /** Field name. */
@@ -51,31 +50,13 @@ export const LabeledCheckboxGroup = forwardRef<HTMLSelectElement, LabeledSelectP
     }
 
     return (
-      <FormControl>
-        <InputLabel htmlFor="select-multiple-chip">{label}</InputLabel>
-        <Select
-          {...input}
-          multiple
-          value={selectedValue}
-          onChange={handleChange}
-          input={<Input id="select-multiple-chip" />}
-          ref={ref}
-          renderValue={(selected: Array<string>) => (
-            <div>
-              {selected.map(value => (
-                <Chip key={value} label={props.options.find((option) => { return (option.value === value) })?.label} />
-              ))}
-            </div>
-          )}
-          MenuProps={MenuProps}
-        >
-          {props.options.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl >
+      <MultiSelect
+        data={props.options}
+        label={label}
+        placeholder="Pick all that you need"
+        onChange={handleChange}
+        value={selectedValue}
+      />
     )
   }
 )

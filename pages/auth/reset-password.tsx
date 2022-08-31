@@ -1,4 +1,4 @@
-import Layout from "app/core/layouts/Layout"
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ResetPassword } from "app/auth/validations"
@@ -7,6 +7,7 @@ import { BlitzPage, Routes } from "@blitzjs/next"
 import { useRouter } from "next/router"
 import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
+import UnauthorizedLayout from "app/core/layouts/UnauthorizedLayout"
 
 const ResetPasswordPage: BlitzPage = () => {
   const router = useRouter()
@@ -57,6 +58,6 @@ const ResetPasswordPage: BlitzPage = () => {
 }
 
 ResetPasswordPage.redirectAuthenticatedTo = "/"
-ResetPasswordPage.getLayout = (page) => <Layout title="Reset Your Password">{page}</Layout>
+ResetPasswordPage.getLayout = (page) => <UnauthorizedLayout title="Reset Your Password">{page}</UnauthorizedLayout>
 
 export default ResetPasswordPage

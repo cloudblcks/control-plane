@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useQuery, useMutation, usePaginatedQuery } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getAction from "app/actions/queries/getAction";
 import updateAction from "app/actions/mutations/updateAction";
 import { ActionForm, FORM_ERROR } from "app/actions/components/ActionForm";
@@ -93,6 +93,6 @@ const EditActionPage = () => {
 };
 
 EditActionPage.authenticate = true;
-EditActionPage.getLayout = (page) => <Layout>{page}</Layout>;
+EditActionPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 export default EditActionPage;

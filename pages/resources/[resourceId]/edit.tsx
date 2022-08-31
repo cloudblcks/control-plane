@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useQuery, useMutation, usePaginatedQuery } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getResource from "app/resources/queries/getResource";
 import updateResource from "app/resources/mutations/updateResource";
 import {
@@ -97,6 +97,6 @@ const EditResourcePage = () => {
 };
 
 EditResourcePage.authenticate = true;
-EditResourcePage.getLayout = (page) => <Layout>{page}</Layout>;
+EditResourcePage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 export default EditResourcePage;

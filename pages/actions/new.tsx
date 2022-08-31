@@ -2,7 +2,7 @@ import { Routes } from "@blitzjs/next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMutation, usePaginatedQuery } from "@blitzjs/rpc";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import createAction from "app/actions/mutations/createAction";
 import { ActionForm, FORM_ERROR } from "app/actions/components/ActionForm";
 import getProviders from "app/providers/queries/getProviders";
@@ -69,7 +69,7 @@ const NewActionPage = () => {
 };
 
 NewActionPage.authenticate = true;
-NewActionPage.getLayout = (page) => <Layout>{page}</Layout>;
+NewActionPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 
 export default NewActionPage;
