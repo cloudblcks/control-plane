@@ -3,7 +3,7 @@ import { useMutation } from "@blitzjs/rpc";
 import { Box } from "@mantine/core";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import {
-  FORM_ERROR, ProviderForm
+  ProviderForm
 } from "app/providers/components/ProviderForm";
 import createProvider from "app/providers/mutations/createProvider";
 import { useRouter } from "next/router";
@@ -17,6 +17,10 @@ const NewProvider = () => {
 
     <ProviderForm
       submitLabel="Create Provider"
+      initialValues={{
+        name: "",
+        category: ""
+      }}
       onSubmit={async (values) => {
         try {
           const provider = await createProviderMutation(values);
@@ -24,7 +28,7 @@ const NewProvider = () => {
         } catch (error: any) {
           console.error(error);
           return {
-            [FORM_ERROR]: error.toString(),
+            error
           };
         }
       }}

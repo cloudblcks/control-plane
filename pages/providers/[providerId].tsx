@@ -2,19 +2,24 @@ import { Routes, useParam } from "@blitzjs/next";
 import { useMutation, useQuery } from "@blitzjs/rpc";
 import { Anchor, Box, Breadcrumbs, Button, Group, Text } from "@mantine/core";
 import { Prism } from "@mantine/prism";
-import { Provider } from "@prisma/client";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import deleteProvider from "app/providers/mutations/deleteProvider";
 import getProvider from "app/providers/queries/getProvider";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Suspense } from "react";
+import { startTransition, Suspense, useState } from "react";
 
-export const ProviderView = (props: { provider: Provider }) => {
+interface ProviderInfo { id: number, name: string }
+
+export const ProviderView = (props: { onProviderLoad: (ProviderInfo) => void }) => {
   const router = useRouter();
   const [deleteProviderMutation] = useMutation(deleteProvider);
-  const provider = props.provider
+  const providerId = useParam("providerId", "number");
+  const [provider] = useQuery(getProvider, { id: providerId });
+  if (provider) {
+    props.onProviderLoad(provider);
+  }
   return (
     <>
       <Head>
@@ -44,16 +49,34 @@ export const ProviderView = (props: { provider: Provider }) => {
 };
 
 const ShowProviderPage = () => {
-  const providerId = useParam("providerId", "number");
-  const [provider] = useQuery(getProvider, { id: providerId });
-  const items = [
-    { title: 'Providers', href: Routes.ProvidersPage() },
-    { title: provider.name, href: Routes.ShowProviderPage({ providerId: provider.id }) },
-  ].map((item, index) => (
-    <Anchor href={item.href.pathname} key={index}>
-      {item.title}
-    </Anchor>
-  ));
+
+  const [providerInfo, setProviderInfo] = useState<ProviderInfo | undefined>(undefined);
+
+  const onProviderInfoChange = (providerInfo: ProviderInfo) => {
+    startTransition(() => {
+      setProviderInfo(providerInfo)
+    })
+  }
+  let items: JSX.Element[] = [];
+  if (providerInfo) {
+    items = [
+      { title: 'Providers', href: Routes.ProvidersPage() },
+      { title: providerInfo.name, href: Routes.ShowProviderPage({ providerId: providerInfo.id }) },
+    ].map((item, index) => (
+      <Anchor href={item.href.pathname} key={index}>
+        {item.title}
+      </Anchor>
+    ));
+  } else {
+    items = [
+      { title: 'Providers', href: Routes.ProvidersPage().pathname },
+      { title: "...", href: "#" },
+    ].map((item, index) => (
+      <Anchor href={item.href} key={index}>
+        {item.title}
+      </Anchor>
+    ));
+  }
   return (
     <AuthorizedLayout title="Provider details">
       <Box
@@ -65,13 +88,12 @@ const ShowProviderPage = () => {
       >
         <Breadcrumbs mb="xl">{items}</Breadcrumbs>
         <Suspense fallback={<div>Loading...</div>}>
-          <ProviderView provider={provider} />
+          <ProviderView onProviderLoad={onProviderInfoChange} />
         </Suspense>
       </Box>
     </AuthorizedLayout>
   );
 };
 
-ShowProviderPage.authenticate = true;
 
 export default ShowProviderPage;

@@ -1,14 +1,16 @@
 import { Button, Container, Group, Paper, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useRouter } from "next/router";
 
 export function ProviderForm(props: {
   onSubmit: (values: { name: string, category: string }) => void,
-  initialValues?: { name: string, category: string },
+  initialValues: { name: string, category: string },
   submitLabel: string,
 }) {
   const form = useForm({
     initialValues: props.initialValues ? props.initialValues : { name: "", category: "" }
   });
+  const router = useRouter();
   return (
     <form onSubmit={form.onSubmit(async (values) => { props.onSubmit(values) })}>
       <Container size={420} my={40}>
@@ -22,7 +24,7 @@ export function ProviderForm(props: {
             <Button mt="lg" type="submit">
               {props.submitLabel}
             </Button>
-            <Button mt="lg" variant="outline">
+            <Button mt="lg" variant="outline" onClick={() => { router.back() }}>
               Cancel
             </Button>
           </Group>
