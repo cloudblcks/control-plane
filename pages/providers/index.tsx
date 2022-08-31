@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getProviders from "app/providers/queries/getProviders";
 import { Button, Table, Container, Group, Text, Center } from "@mantine/core";
-import ProviderItem from "app/providers/components/ProviderItem";
 
 const ITEMS_PER_PAGE = 100;
 
