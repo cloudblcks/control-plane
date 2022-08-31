@@ -24,7 +24,7 @@ export const ProviderView = (props: { provider: Provider }) => {
       <Text><Text weight={500} component="span">Provider category:</Text> {provider.category}</Text>
       <Text weight={500}>Raw:</Text>
       <Prism language="json">{JSON.stringify(provider, null, 2)}</Prism>
-      <Group align="right">
+      <Group align="right" mt="lg">
         <Link href={Routes.EditProviderPage({ providerId: provider.id })}>
           <Button>
             Edit
@@ -63,7 +63,7 @@ const ShowProviderPage = () => {
           backgroundColor: theme.white,
         })}
       >
-        <Breadcrumbs>{items}</Breadcrumbs>
+        <Breadcrumbs mb="xl">{items}</Breadcrumbs>
         <Suspense fallback={<div>Loading...</div>}>
           <ProviderView provider={provider} />
         </Suspense>
