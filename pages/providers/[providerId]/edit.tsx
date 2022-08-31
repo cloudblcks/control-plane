@@ -1,18 +1,16 @@
-import { Suspense } from "react";
-import { Routes } from "@blitzjs/next";
+import { Routes, useParam } from "@blitzjs/next";
+import { useMutation, useQuery } from "@blitzjs/rpc";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@blitzjs/rpc";
-import { useParam } from "@blitzjs/next";
+import { Suspense } from "react";
 
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
-import getProvider from "app/providers/queries/getProvider";
-import updateProvider from "app/providers/mutations/updateProvider";
 import {
-  ProviderForm,
-  FORM_ERROR,
+  FORM_ERROR, ProviderForm
 } from "app/providers/components/ProviderForm";
+import updateProvider from "app/providers/mutations/updateProvider";
+import getProvider from "app/providers/queries/getProvider";
 
 export const EditProvider = () => {
   const router = useRouter();
@@ -67,21 +65,22 @@ export const EditProvider = () => {
 
 const EditProviderPage = () => {
   return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <EditProvider />
-      </Suspense>
+    <AuthorizedLayout title="Edit Provider">
+      <div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <EditProvider />
+        </Suspense>
 
-      <p>
-        <Link href={Routes.ProvidersPage()}>
-          <a>Providers</a>
-        </Link>
-      </p>
-    </div>
+        <p>
+          <Link href={Routes.ProvidersPage()}>
+            <a>Providers</a>
+          </Link>
+        </p>
+      </div>
+    </AuthorizedLayout>
   );
 };
 
 EditProviderPage.authenticate = true;
-EditProviderPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 export default EditProviderPage;
