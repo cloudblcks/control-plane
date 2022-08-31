@@ -1,8 +1,10 @@
 import { ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps } from "@blitzjs/next"
 import { AuthenticationError, AuthorizationError } from "blitz"
-import React from "react"
+import React, { useState } from "react"
 import { withBlitz } from "app/blitz-client"
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import "../public/styles.css"
+import Sidebar from "app/core/components/Sidebar";
 
 function RootErrorFallback({ error }: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
@@ -25,10 +27,27 @@ function RootErrorFallback({ error }: ErrorFallbackProps) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
-    <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      <Component {...pageProps} />
-    </ErrorBoundary>
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colorScheme,
+        }}>
+
+        <ErrorBoundary FallbackComponent={RootErrorFallback}>
+          <Component {...pageProps} />
+        </ErrorBoundary >
+      </MantineProvider>
+    </ColorSchemeProvider>
   )
 }
 

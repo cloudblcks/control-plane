@@ -1,20 +1,20 @@
-import { Suspense } from "react";
-import { Routes } from "@blitzjs/next";
+import { Routes, useParam } from "@blitzjs/next";
+import { useMutation, useQuery } from "@blitzjs/rpc";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@blitzjs/rpc";
-import { useParam } from "@blitzjs/next";
+import { startTransition, Suspense, useState } from "react";
 
-import Layout from "app/core/layouts/Layout";
-import getProvider from "app/providers/queries/getProvider";
-import updateProvider from "app/providers/mutations/updateProvider";
+import { Box } from "@mantine/core";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import {
-  ProviderForm,
-  FORM_ERROR,
+  ProviderForm
 } from "app/providers/components/ProviderForm";
+import updateProvider from "app/providers/mutations/updateProvider";
+import getProvider from "app/providers/queries/getProvider";
 
-export const EditProvider = () => {
+interface ProviderInfo { id: number, name: string }
+
+export const EditProvider = (props: { onProviderLoad: (ProviderInfo) => void }) => {
   const router = useRouter();
   const providerId = useParam("providerId", "number");
   const [provider, { setQueryData }] = useQuery(
@@ -25,6 +25,9 @@ export const EditProvider = () => {
       staleTime: Infinity,
     }
   );
+  if (provider) {
+    props.onProviderLoad(provider);
+  }
   const [updateProviderMutation] = useMutation(updateProvider);
 
   return (
@@ -34,16 +37,13 @@ export const EditProvider = () => {
       </Head>
 
       <div>
-        <h1>Edit Provider {provider.id}</h1>
-        <pre>{JSON.stringify(provider, null, 2)}</pre>
-
         <ProviderForm
-          submitText="Update Provider"
           // TODO use a zod schema for form validation
           //  - Tip: extract mutation's schema into a shared `validations.ts` file and
           //         then import and use it here
           // schema={UpdateProvider}
           initialValues={provider}
+          submitLabel="Update Provider"
           onSubmit={async (values) => {
             try {
               const updated = await updateProviderMutation({
@@ -55,7 +55,7 @@ export const EditProvider = () => {
             } catch (error: any) {
               console.error(error);
               return {
-                [FORM_ERROR]: error.toString(),
+                error
               };
             }
           }}
@@ -66,22 +66,30 @@ export const EditProvider = () => {
 };
 
 const EditProviderPage = () => {
-  return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <EditProvider />
-      </Suspense>
+  const [providerInfo, setProviderInfo] = useState<ProviderInfo | undefined>(undefined);
 
-      <p>
-        <Link href={Routes.ProvidersPage()}>
-          <a>Providers</a>
-        </Link>
-      </p>
-    </div>
+  const onProviderInfoChange = (providerInfo: ProviderInfo) => {
+    startTransition(() => {
+      setProviderInfo(providerInfo)
+    })
+  }
+  return (
+    <AuthorizedLayout title={"Edit Provider" + (providerInfo ? providerInfo.name : "")}>
+      <Box
+        sx={(theme) => ({
+          padding: theme.spacing.xl,
+          borderRadius: theme.radius.md,
+          backgroundColor: theme.white,
+        })}
+      >
+        <Suspense fallback={<div>Loading...</div>}>
+          <EditProvider onProviderLoad={onProviderInfoChange} />
+        </Suspense>
+      </Box>
+    </AuthorizedLayout >
   );
 };
 
 EditProviderPage.authenticate = true;
-EditProviderPage.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default EditProviderPage;

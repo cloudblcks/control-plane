@@ -1,15 +1,15 @@
 import { useRouter } from "next/router"
-import Layout from "app/core/layouts/Layout"
 import { SignupForm } from "app/auth/components/SignupForm"
 import { BlitzPage, Routes } from "@blitzjs/next"
+import UnauthorizedLayout from "app/core/layouts/UnauthorizedLayout"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
-    <Layout title="Sign Up">
+    <UnauthorizedLayout title="Sign Up">
       <SignupForm onSuccess={() => router.push(Routes.Home())} />
-    </Layout>
+    </UnauthorizedLayout>
   )
 }
 

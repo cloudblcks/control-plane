@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useQuery, useMutation } from "@blitzjs/rpc";
 import { useParam } from "@blitzjs/next";
 
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getPolicy from "app/policies/queries/getPolicy";
 import updatePolicy from "app/policies/mutations/updatePolicy";
 import { PolicyForm, FORM_ERROR } from "app/policies/components/PolicyForm";
@@ -79,6 +79,6 @@ const EditPolicyPage = () => {
 };
 
 EditPolicyPage.authenticate = true;
-EditPolicyPage.getLayout = (page) => <Layout>{page}</Layout>;
+EditPolicyPage.getLayout = (page) => <AuthorizedLayout>{page}</AuthorizedLayout>;
 
 export default EditPolicyPage;

@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
-import Layout from "app/core/layouts/Layout";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import getPolicies from "app/policies/queries/getPolicies";
 
 const ITEMS_PER_PAGE = 100;
@@ -45,7 +45,7 @@ export const PoliciesList = () => {
 
 const PoliciesPage = () => {
   return (
-    <Layout>
+    <AuthorizedLayout>
       <Head>
         <title>Policies</title>
       </Head>
@@ -61,7 +61,7 @@ const PoliciesPage = () => {
           <PoliciesList />
         </Suspense>
       </div>
-    </Layout>
+    </AuthorizedLayout>
   );
 };
 
