@@ -1,6 +1,6 @@
 import { Routes } from "@blitzjs/next";
 import { useMutation, usePaginatedQuery } from "@blitzjs/rpc";
-import { ActionIcon, Box, Button, Center, Container, Group, Table, Text } from "@mantine/core";
+import { ActionIcon, Badge, Box, Button, Center, Container, Group, Table, Text, useMantineTheme } from "@mantine/core";
 import { IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import deleteProviderAccount from "app/provider-accounts/mutations/deleteProviderAccount";
@@ -14,6 +14,7 @@ const ITEMS_PER_PAGE = 100;
 
 export const ProviderAccountsList = () => {
   const router = useRouter();
+  const theme = useMantineTheme();
   const page = Number(router.query.page) || 0;
   const [{ providerAccounts, hasMore }] = usePaginatedQuery(
     getProviderAccounts,
@@ -24,6 +25,13 @@ export const ProviderAccountsList = () => {
     }
   );
 
+  const categoryColors = {
+    database: "blue",
+    serverless: "green",
+    middleware: "yellow",
+    paas: "cyan"
+  }
+
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } });
   const goToNextPage = () => router.push({ query: { page: page + 1 } });
   const [deleteProviderAccountMutation] = useMutation(deleteProviderAccount);
@@ -33,6 +41,8 @@ export const ProviderAccountsList = () => {
         <thead>
           <tr>
             <th><Text>Name</Text></th>
+            <th><Text>Provider</Text></th>
+            <th><Text>Category</Text></th>
             <th />
           </tr>
         </thead>
@@ -40,6 +50,15 @@ export const ProviderAccountsList = () => {
           {providerAccounts.map((providerAccount) => (
             <tr key={providerAccount.id}>
               <td><Text>{providerAccount.name}</Text></td>
+              <td><Text>{providerAccount.provider.name}</Text></td>
+              <td>
+                <Badge
+                  color={categoryColors[providerAccount.provider.category.toLowerCase()]}
+                  variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+                >
+                  {providerAccount.provider.category}
+                </Badge>
+              </td>
               <td>
                 <Group spacing={2} position="right">
                   <Link href={Routes.ShowProviderAccountPage({ providerAccountId: providerAccount.id })}>
