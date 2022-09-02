@@ -1,18 +1,21 @@
-import { Routes, useParam } from "@blitzjs/next";
-import { useMutation, usePaginatedQuery, useQuery } from "@blitzjs/rpc";
+import { Suspense } from "react";
+import { Routes } from "@blitzjs/next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Suspense } from "react";
+import { useQuery, useMutation, usePaginatedQuery } from "@blitzjs/rpc";
+import { useParam } from "@blitzjs/next";
 
-import { useCurrentUser } from "app/core/hooks/useCurrentUser";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
-import {
-  ProviderAccountForm
-} from "app/provider-accounts/components/ProviderAccountForm";
-import updateProviderAccount from "app/provider-accounts/mutations/updateProviderAccount";
 import getProviderAccount from "app/provider-accounts/queries/getProviderAccount";
+import updateProviderAccount from "app/provider-accounts/mutations/updateProviderAccount";
+import {
+  ProviderAccountForm,
+  FORM_ERROR,
+} from "app/provider-accounts/components/ProviderAccountForm";
 import getProviders from "app/providers/queries/getProviders";
+import { Prisma } from "@prisma/client";
+import { useCurrentUser } from "app/core/hooks/useCurrentUser";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -49,12 +52,12 @@ export const EditProviderAccount = () => {
           <pre>{JSON.stringify(providerAccount, null, 2)}</pre>
 
           <ProviderAccountForm
-            submitLabel="Update ProviderAccount"
+            submitText="Update ProviderAccount"
             // TODO use a zod schema for form validation
             //  - Tip: extract mutation's schema into a shared `validations.ts` file and
             //         then import and use it here
             // schema={UpdateProviderAccount}
-            // initialValues={providerAccount}
+            initialValues={providerAccount}
             options={providers.map((item) => {
               return { label: item.name, value: item.id.toString() }
             })}
@@ -75,7 +78,9 @@ export const EditProviderAccount = () => {
                 );
               } catch (error: any) {
                 console.error(error);
-                return error;
+                return {
+                  [FORM_ERROR]: error.toString(),
+                };
               }
             }}
           />
