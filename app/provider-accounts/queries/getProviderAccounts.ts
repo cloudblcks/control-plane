@@ -1,5 +1,5 @@
-import { paginate } from "blitz";
 import { resolver } from "@blitzjs/rpc";
+import { paginate } from "blitz";
 import db, { Prisma } from "db";
 
 interface GetProviderAccountsInput
@@ -27,7 +27,12 @@ export default resolver.pipe(
       take,
       count: () => db.providerAccount.count({ where }),
       query: (paginateArgs) =>
-        db.providerAccount.findMany({ ...paginateArgs, where, orderBy }),
+        db.providerAccount.findMany({
+          ...paginateArgs,
+          where,
+          orderBy,
+          include: { provider: true },
+        }),
     });
 
     return {

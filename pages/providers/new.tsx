@@ -1,6 +1,6 @@
 import { Routes } from "@blitzjs/next";
 import { useMutation } from "@blitzjs/rpc";
-import { Box } from "@mantine/core";
+import { Box, Center, Text } from "@mantine/core";
 import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
 import {
   ProviderForm
@@ -47,7 +47,7 @@ const NewProviderPage = () => {
           backgroundColor: theme.white,
         })}
       >
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Center><Text>Loading...</Text></Center>}>
           <NewProvider />
         </Suspense>
       </Box>

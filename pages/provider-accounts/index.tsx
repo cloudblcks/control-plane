@@ -1,16 +1,20 @@
-import { Suspense } from "react";
 import { Routes } from "@blitzjs/next";
+import { useMutation, usePaginatedQuery } from "@blitzjs/rpc";
+import { ActionIcon, Badge, Box, Button, Center, Container, Group, Table, Text, useMantineTheme } from "@mantine/core";
+import { IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
+import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
+import deleteProviderAccount from "app/provider-accounts/mutations/deleteProviderAccount";
+import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
 import Head from "next/head";
 import Link from "next/link";
-import { usePaginatedQuery } from "@blitzjs/rpc";
 import { useRouter } from "next/router";
-import AuthorizedLayout from "app/core/layouts/AuthorizedLayout";
-import getProviderAccounts from "app/provider-accounts/queries/getProviderAccounts";
+import { Suspense } from "react";
 
 const ITEMS_PER_PAGE = 100;
 
 export const ProviderAccountsList = () => {
   const router = useRouter();
+  const theme = useMantineTheme();
   const page = Number(router.query.page) || 0;
   const [{ providerAccounts, hasMore }] = usePaginatedQuery(
     getProviderAccounts,
@@ -21,32 +25,80 @@ export const ProviderAccountsList = () => {
     }
   );
 
+  const categoryColors = {
+    database: "blue",
+    serverless: "green",
+    middleware: "yellow",
+    paas: "cyan"
+  }
+
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } });
   const goToNextPage = () => router.push({ query: { page: page + 1 } });
-
+  const [deleteProviderAccountMutation] = useMutation(deleteProviderAccount);
   return (
-    <div>
-      <ul>
-        {providerAccounts.map((providerAccount) => (
-          <li key={providerAccount.id}>
-            <Link
-              href={Routes.ShowProviderAccountPage({
-                providerAccountId: providerAccount.id,
-              })}
-            >
-              <a>{providerAccount.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <button disabled={page === 0} onClick={goToPreviousPage}>
-        Previous
-      </button>
-      <button disabled={!hasMore} onClick={goToNextPage}>
-        Next
-      </button>
-    </div>
+    <Container>
+      <Table verticalSpacing="lg">
+        <thead>
+          <tr>
+            <th><Text>Name</Text></th>
+            <th><Text>Provider</Text></th>
+            <th><Text>Category</Text></th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {providerAccounts.map((providerAccount) => (
+            <tr key={providerAccount.id}>
+              <td><Text>{providerAccount.name}</Text></td>
+              <td><Text>{providerAccount.provider.name}</Text></td>
+              <td>
+                <Badge
+                  color={categoryColors[providerAccount.provider.category.toLowerCase()]}
+                  variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+                >
+                  {providerAccount.provider.category}
+                </Badge>
+              </td>
+              <td>
+                <Group spacing={2} position="right">
+                  <Link href={Routes.ShowProviderAccountPage({ providerAccountId: providerAccount.id })}>
+                    <ActionIcon color="blue">
+                      <IconInfoCircle size={20} stroke={1.5} />
+                    </ActionIcon>
+                  </Link>
+                  <Link href={Routes.EditProviderAccountPage({ providerAccountId: providerAccount.id })}>
+                    <ActionIcon>
+                      <IconPencil size={20} stroke={1.5} />
+                    </ActionIcon>
+                  </Link>
+                  <ActionIcon color="red" onClick={async () => {
+                    if (window.confirm("Provider account " + providerAccount.name + " will be deleted. Are you sure?")) {
+                      await deleteProviderAccountMutation({ id: providerAccount.id });
+                      void router.push(Routes.ProviderAccountsPage());
+                    }
+                  }}>
+                    <IconTrash size={20} stroke={1.5} />
+                  </ActionIcon>
+                </Group>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <Group position="apart">
+        <Group position="left">
+          <Button disabled={page === 0} onClick={goToPreviousPage}>
+            Previous
+          </Button>
+          <Button disabled={!hasMore} onClick={goToNextPage}>
+            Next
+          </Button>
+        </Group>
+        <Link href={Routes.NewProviderAccountPage()}>
+          <Button component="a">Connect New Provider Account</Button>
+        </Link>
+      </Group>
+    </Container>
   );
 };
 
@@ -57,17 +109,17 @@ const ProviderAccountsPage = () => {
         <title>ProviderAccounts</title>
       </Head>
 
-      <div>
-        <p>
-          <Link href={Routes.NewProviderAccountPage()}>
-            <a>Create ProviderAccount</a>
-          </Link>
-        </p>
-
-        <Suspense fallback={<div>Loading...</div>}>
+      <Box
+        sx={(theme) => ({
+          padding: theme.spacing.xl,
+          borderRadius: theme.radius.md,
+          backgroundColor: theme.white,
+        })}
+      >
+        <Suspense fallback={<Center><Text>Loading...</Text></Center>}>
           <ProviderAccountsList />
         </Suspense>
-      </div>
+      </Box>
     </AuthorizedLayout>
   );
 };
